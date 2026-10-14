@@ -7,7 +7,7 @@ on:
     branches: [ main, master ]
 
 jobs:
-  appium-tests:
+  build-apk:
     runs-on: ubuntu-24.04
     steps:
       - name: checkOut Appium repository
@@ -21,12 +21,11 @@ jobs:
         run: |
           ls -la WebdevLighthouseProject/CommunityHub/frontend/android
           test -f WebdevLighthouseProject/CommunityHub/frontend/android/gradlew
-      - name: JDK 17 setup
+      - name: JDK 21 setup
         uses: actions/setup-java@v4
         with:
           java-version: '21'
           distribution: 'temurin'
-          cache: 'maven'
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -37,11 +36,6 @@ jobs:
       - name: Synchronize Capacitor Android
         working-directory: WebdevLighthouseProject/CommunityHub/frontend
         run: npx cap sync android
-      - name: Inspect Capacitor project
-        run: |
-          ls -la WebdevLighthouseProject/CommunityHub/frontend
-          ls -la WebdevLighthouseProject/CommunityHub/frontend/android
-          find WebdevLighthouseProject/CommunityHub/frontend -maxdepth 2 -name "capacitor.config.*"
       - name: Build Capacitor debug APK
         working-directory: WebdevLighthouseProject/CommunityHub/frontend/android
         run: bash ./gradlew assembleDebug
@@ -49,6 +43,39 @@ jobs:
         run: |
           ls -lh WebdevLighthouseProject/CommunityHub/frontend/android/app/build/outputs/apk/debug/
           test -f WebdevLighthouseProject/CommunityHub/frontend/android/app/build/outputs/apk/debug/app-debug.apk
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: communityhub-debug-apk
+          path: WebdevLighthouseProject/CommunityHub/frontend/android/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
+
+  appium-tests:
+    needs: build-apk
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Download APK artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: communityhub-debug-apk
+          path: apk
+      - name: Verify downloaded APK
+        run: |
+          ls -lh apk/
+          test -f apk/app-debug.apk
+      - name: checkOut Appium repository
+        uses: actions/checkout@v4
+      - name: JDK 17 setup
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: 'maven'
+          cache-dependency-path: mobile-tests/pom.xml
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
       - name: Install Appium Server 3
         run: |
           npm install -g appium@3
@@ -63,11 +90,7 @@ jobs:
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
       - name: Check disk space before emulator
-        run: |
-          df -h
-          du -sh ~/.gradle 2>/dev/null || true
-          du -sh WebdevLighthouseProject/CommunityHub/frontend/android/build 2>/dev/null || true
-          du -sh WebdevLighthouseProject/CommunityHub/frontend/android/app/build 2>/dev/null || true
+        run:  df -h /
       - name: Create Emulator
         uses: ReactiveCircus/android-emulator-runner@v2
         with:
