@@ -20,4 +20,5 @@ jobs:
           distribution: 'temurin'
           cache: 'maven'
       - name: Compile Appium tests
+        working-directory: CommunityHub
         run: mvn -B test-compile
