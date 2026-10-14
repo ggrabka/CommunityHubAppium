@@ -103,6 +103,7 @@ jobs:
             adb devices
             adb wait-for-device
             test "$(adb shell getprop sys.boot_completed | tr -d '\r')" = "1"
+            adb install -r apk/app-debug.apk
       - name: Compile Appium tests
         working-directory: mobile-tests
         run: mvn -B test-compile
