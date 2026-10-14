@@ -15,12 +15,12 @@ jobs:
       - name: Checkout Lighthouse application
         uses: actions/checkout@v4
         with:
-          repository: ggrabka/WebdevLighthouseProject/frontend
+          repository: ggrabka/WebdevLighthouseProject
           path: WebdevLighthouseProject
       - name: Verify Android project
         run: |
-          ls -la WebdevLighthouseProject/CommunityHub/android
-          test -f WebdevLighthouseProject/CommunityHub/android/gradlew
+          ls -la WebdevLighthouseProject/CommunityHub/frontend/android
+          test -f WebdevLighthouseProject/CommunityHub/frontend/android/gradlew
       - name: JDK 17 setup
         uses: actions/setup-java@v4
         with:
