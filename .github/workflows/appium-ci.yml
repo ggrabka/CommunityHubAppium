@@ -31,6 +31,22 @@ jobs:
         run: |
           appium driver install uiautomator2
           appium driver list --installed
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+      - name: Create Emulator
+        uses: ReactiveCircus/android-emulator-runner@v2
+        with:
+          api-level: 37
+          target: google_apis
+          arch: x86_64
+          profile: pixel_6
+          script: |
+            adb devices
+            adb wait-for-device
+            test "$(adb shell getprop sys.boot_completed | tr -d '\r')" = "1"
       - name: Compile Appium tests
         working-directory: mobile-tests
         run: mvn -B test-compile
