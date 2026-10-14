@@ -15,7 +15,7 @@ jobs:
       - name: Checkout Lighthouse application
         uses: actions/checkout@v4
         with:
-          repository: ggrabka/WebdevLighthouseProject
+          repository: ggrabka/WebdevLighthouseProject/frontend
           path: WebdevLighthouseProject
       - name: Verify Android project
         run: |
