@@ -31,6 +31,13 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - name: Build Capacitor debug APK
+        working-directory: WebdevLighthouseProject/CommunityHub/frontend/android
+        run: bash ./gradlew assembleDebug
+      - name: Verify debug APK
+        run: |
+          ls -lh WebdevLighthouseProject/CommunityHub/frontend/android/app/build/outputs/apk/debug/
+          test -f WebdevLighthouseProject/CommunityHub/frontend/android/app/build/outputs/apk/debug/app-debug.apk
       - name: Install Appium Server 3
         run: |
           npm install -g appium@3
