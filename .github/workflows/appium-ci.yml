@@ -19,6 +19,18 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
           cache: 'maven'
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Appium Server 3
+        run: |
+          npm install -g appium@3
+          appium --version
+      - name: Install UiAutomator2 driver
+        run: |
+          appium driver install uiautomator2
+          appium driver list --installed
       - name: Compile Appium tests
         working-directory: mobile-tests
         run: mvn -B test-compile
