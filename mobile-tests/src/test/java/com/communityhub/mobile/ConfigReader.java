@@ -31,16 +31,6 @@ public class ConfigReader {
            return override;
        }
 
-        System.out.println(
-                "System property appium.url: " +
-                        System.getProperty("appium.url")
-        );
-
-        System.out.println(
-                "Resolved Appium URL: " +
-                        ConfigReader.get("appium.url")
-        );
-
         String value = properties.getProperty(key);
 
         if (value == null ||value.isBlank()) {

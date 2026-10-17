@@ -126,6 +126,13 @@ jobs:
       - name: Compile Appium tests
         working-directory: mobile-tests
         run: mvn -B test-compile
+      - name: Inspect committed ConfigReader
+        run: |
+          echo "Current commit:"
+          git rev-parse --short HEAD
+
+          echo "ConfigReader source:"
+          nl -ba mobile-tests/src/test/java/com/communityhub/mobile/ConfigReader.java
       - name: Check Appium configuration
         run: |
           echo "Committed config.properties:"
