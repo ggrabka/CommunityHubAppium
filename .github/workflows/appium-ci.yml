@@ -54,6 +54,8 @@ jobs:
     needs: build-apk
     runs-on: ubuntu-24.04
     steps:
+      - name: checkOut Appium repository
+      - uses: actions/checkout@v4
       - name: Download APK artifact
         uses: actions/download-artifact@v4
         with:
@@ -63,8 +65,6 @@ jobs:
         run: |
           ls -lh apk/
           test -f apk/app-debug.apk
-      - name: checkOut Appium repository
-        uses: actions/checkout@v4
       - name: JDK 17 setup
         uses: actions/setup-java@v4
         with:
