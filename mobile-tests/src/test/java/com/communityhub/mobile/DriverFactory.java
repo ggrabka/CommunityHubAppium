@@ -10,7 +10,13 @@ import java.nio.file.Path;
 public class DriverFactory {
     public static AndroidDriver createDriver() throws Exception {
 
-        Path apk = Path.of(ConfigReader.get("app.path"));
+        String apkPath = System.getProperty(
+                "app.path",
+                ConfigReader.get("app.path")
+        );
+
+        Path apk = Path.of(apkPath);
+
         if (!Files.isRegularFile(apk)) {
             throw new IllegalStateException(
                     "APK not found: " + apk
