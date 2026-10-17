@@ -91,6 +91,8 @@ jobs:
           sudo udevadm trigger --name-match=kvm
       - name: Check disk space before emulator
         run:  df -h /
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
       - name: Diagnose Android Emulator SDK installation
         run: |
           echo "Disk space before installation:"
