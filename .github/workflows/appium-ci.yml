@@ -123,6 +123,9 @@ jobs:
 
           cat /tmp/appium.log
           exit 1
+      - name: Compile Appium tests
+        working-directory: mobile-tests
+        run: mvn -B test-compile
       - name: Create Emulator
         uses: ReactiveCircus/android-emulator-runner@v2
         with:
@@ -141,6 +144,5 @@ jobs:
             test -f "$GITHUB_WORKSPACE/apk/app-debug.apk"
             
             adb install -r "$GITHUB_WORKSPACE/apk/app-debug.apk"
-      - name: Compile Appium tests
-        working-directory: mobile-tests
-        run: mvn -B test-compile
+            cd "$GITHUB_WORKSPACE/mobile-tests"
+            mvn -B test
