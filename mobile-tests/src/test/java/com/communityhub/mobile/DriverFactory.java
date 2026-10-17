@@ -36,6 +36,10 @@ public class DriverFactory {
         options.setCapability("appium:autoWebview", false);
         options.setCapability(
                 "appium:ensureWebviewsHavePages", true);
+        options.setCapability(
+                "appium:chromedriverAutodownload",
+                true
+        );
 
         String url = ConfigReader.get("appium.url");
         System.out.println("Resolved Appium URL: " + url);
