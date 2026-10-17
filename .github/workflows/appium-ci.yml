@@ -92,7 +92,9 @@ jobs:
       - name: Check disk space before emulator
         run:  df -h /
       - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
+        uses: android-actions/setup-android@v4
+        with:
+          packages: 'platform-tools'
       - name: Diagnose Android Emulator SDK installation
         run: |
           echo "Disk space before installation:"
