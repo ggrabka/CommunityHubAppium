@@ -91,6 +91,19 @@ jobs:
           sudo udevadm trigger --name-match=kvm
       - name: Check disk space before emulator
         run:  df -h /
+      - name: Diagnose Android Emulator SDK installation
+        run: |
+          echo "Disk space before installation:"
+          df -h /
+
+          echo "Android SDK location:"
+          echo "$ANDROID_HOME"
+
+          echo "Install Android Emulator package:"
+          sdkmanager --install "emulator" --channel=0 --verbose
+
+          echo "Disk space after installation:"
+          df -h /
       - name: Create Emulator
         uses: ReactiveCircus/android-emulator-runner@v2
         with:
