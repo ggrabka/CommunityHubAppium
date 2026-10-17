@@ -126,6 +126,10 @@ jobs:
       - name: Compile Appium tests
         working-directory: mobile-tests
         run: mvn -B test-compile
+      - name: Check Appium configuration
+        run: |
+          echo "Committed config.properties:"
+          grep -n "^appium.url" mobile-tests/src/test/resources/config.properties
       - name: Create Emulator
         uses: ReactiveCircus/android-emulator-runner@v2
         with:
