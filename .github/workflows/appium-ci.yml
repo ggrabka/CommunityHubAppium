@@ -137,6 +137,9 @@ jobs:
         run: |
           echo "Committed config.properties:"
           grep -n "^appium.url" mobile-tests/src/test/resources/config.properties
+      - name: Check CommunityHub backend
+        run: |
+          curl --fail --show-error http://127.0.0.1:3000/api/health
       - name: Create Emulator
         uses: ReactiveCircus/android-emulator-runner@v2
         with:
