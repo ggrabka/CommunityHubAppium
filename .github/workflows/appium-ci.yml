@@ -56,6 +56,27 @@ jobs:
     steps:
       - name: checkOut Appium repository
         uses: actions/checkout@v4
+      - name: Checkout CommunityHub application
+        uses: actions/checkout@v4
+        with:
+          repository: ggrabka/WebdevLighthouseProject
+          path: WebdevLighthouseProject
+      - name: Install backend dependencies
+        working-directory: WebdevLighthouseProject/CommunityHub/backend
+        run: npm ci
+      - name: Start CommunityHub backend
+        working-directory: WebdevLighthouseProject/CommunityHub/backend
+        run: |
+          node server.js > /tmp/communityhub-backend.log 2>&1 &
+          for i in {1..30}; do
+            if curl --fail --silent http://127.0.0.1:3000/api/health; then
+              echo "CommunityHub backend is ready"
+              exit 0
+            fi
+            sleep 1
+          done
+          cat /tmp/communityhub-backend.log
+          exit 1
       - name: Download APK artifact
         uses: actions/download-artifact@v4
         with:
