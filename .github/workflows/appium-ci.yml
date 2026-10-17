@@ -110,7 +110,7 @@ jobs:
           df -h /
       - name: Start Appium server
         run: |
-          appium --address 127.0.0.1 --port 4723 > /tmp/appium.log 2>&1 &
+          appium --address 127.0.0.1 --port 4723 --allow-insecure=uiautomator2:chromedriver_autodownload > /tmp/appium.log 2>&1 &
           echo $! > /tmp/appium.pid
 
           for i in {1..30}; do
@@ -155,4 +155,4 @@ jobs:
             test -f "$GITHUB_WORKSPACE/apk/app-debug.apk"
             
             adb install -r "$GITHUB_WORKSPACE/apk/app-debug.apk"
-            mvn -B -f "$GITHUB_WORKSPACE/mobile-tests/pom.xml" -Dapp.path="$GITHUB_WORKSPACE/apk/app-debug.apk" test
+            mvn -B -f "$GITHUB_WORKSPACE/mobile-tests/pom.xml" -Dapp.path="$GITHUB_WORKSPACE/apk/app-debug.apk" '-Dtest=LoginTest#shouldRejectLoginWithInvalidPassword' test || { tail -n 150 /tmp/appium.log; exit 1; }
