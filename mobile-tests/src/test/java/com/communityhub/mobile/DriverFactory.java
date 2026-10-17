@@ -38,6 +38,7 @@ public class DriverFactory {
                 "appium:ensureWebviewsHavePages", true);
 
         String url = ConfigReader.get("appium.url");
+        System.out.println("Resolved Appium URL: " + url);
       return new AndroidDriver(
               URI.create(url).toURL(), options);
     }
