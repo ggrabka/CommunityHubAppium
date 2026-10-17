@@ -144,5 +144,4 @@ jobs:
             test -f "$GITHUB_WORKSPACE/apk/app-debug.apk"
             
             adb install -r "$GITHUB_WORKSPACE/apk/app-debug.apk"
-            cd "$GITHUB_WORKSPACE/mobile-tests"
-            mvn -B test
+            mvn -B -f "$GITHUB_WORKSPACE/mobile-tests/pom.xml" test
