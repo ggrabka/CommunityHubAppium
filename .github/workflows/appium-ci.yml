@@ -108,6 +108,21 @@ jobs:
 
           echo "Disk space after installation:"
           df -h /
+      - name: Start Appium server
+        run: |
+          appium --address 127.0.0.1 --port 4723 > /tmp/appium.log 2>&1 &
+          echo $! > /tmp/appium.pid
+
+          for i in {1..30}; do
+            if curl --fail --silent http://127.0.0.1:4723/status; then
+              echo "Appium server is ready"
+              exit 0
+            fi
+            sleep 1
+          done
+
+          cat /tmp/appium.log
+          exit 1
       - name: Create Emulator
         uses: ReactiveCircus/android-emulator-runner@v2
         with:
