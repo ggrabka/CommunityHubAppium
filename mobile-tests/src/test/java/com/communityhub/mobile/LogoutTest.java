@@ -12,20 +12,15 @@ public class LogoutTest extends BaseTest {
 
     @BeforeEach
     void setUpAuthenticatedUser() throws Exception {
-        // 1. Switch to WebView
         ContextManager contextManager = new ContextManager(driver);
         contextManager.switchToWebView();
 
-
-        // 2. Create LoginPage using existing driver
         LoginPage loginPage = new LoginPage(driver);
         DashboardPage dashboardPage = new DashboardPage(driver);
 
-        // 3. Enter credentials
         loginPage.enterUserName("admin");
         loginPage.enterPassword("admin123");
 
-        // 4. Click login
         loginPage.clickLoginButton();
 
         assertTrue(dashboardPage.isLogoutButtonDisplayed()
