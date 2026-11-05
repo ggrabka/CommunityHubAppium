@@ -23,7 +23,7 @@ public class ContextManager {
                         .orElse(null));
         driver.context(webview);
     }
-
+    //test
     public void switchToNative() {
         driver.context("NATIVE_APP");
     }
